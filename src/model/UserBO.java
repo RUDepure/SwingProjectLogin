@@ -2,32 +2,44 @@ package model;
 
 public class UserBO 
 {
-	private String username;
-	private String password;
+	private int id;
+	private String usuarioJava;
+	private String contrasenaJava;
 	
-	public UserBO()
-	{
-	}
+	public UserBO(){}
 	public UserBO(String pUsername, String pPassword)
 	{
-		this.username = pUsername;
-		this.password = pPassword;
+		this.usuarioJava = pUsername;
+		this.contrasenaJava = pPassword;
 	}
+	
+	public int getId() 
+	{
+		return id;
+	}
+	   
+	public void setId( int id ) 
+	{
+		this.id = id;
+	}
+	
 	public String getUsername() 
 	{
-		return username;
+		return usuarioJava;
 	}
-	public void setUsername(String username) 
+	
+	public void setUsername(String usuario) 
 	{
-		this.username = username;
+		this.usuarioJava = usuario;
 	}
+	
 	public String getPassword()
 	{
-		return password;
+		return contrasenaJava;
 	}
-	public void setPassword(String password) 
+	
+	public void setPassword(String contrasena) 
 	{
-		this.password = password;
+		this.contrasenaJava = contrasena;
 	}
-
 }

@@ -5,62 +5,100 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Iterator;
+import java.util.List;
 
-public class UserHomeDB implements UserHome
+import org.hibernate.HibernateException;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+public class UserHomeDB implements UserHome 
 {
-	public UserBO validate(String pUsername, String pPassword)
+	private static SessionFactory factory;
+
+	public UserBO validate(String pUsername, String pPassword) 
 	{
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
 		UserBO user = null;
-	    
+
 		try 
 		{
-
-            connection = DriverManager.getConnection("jdbc:oracle:thin:@10.166.51.12:1521:rmsdev01", "rms", "rms");
-    		if (connection != null) 
-    		{
-    			System.out.println("You made it, take control your database now!");
-
-              try 
-              {
-            	  System.out.println("Creating statement...");
-            	  String sql = "SELECT usuario, contrasena FROM cuentas_java WHERE usuario = ?";
-            	  preparedStatement = connection.prepareStatement(sql);
-            	  preparedStatement.setString(1, pUsername);
-                  ResultSet rs = preparedStatement.executeQuery();
-                  
-                  while(rs.next())
-                  {
-                	  String username = rs.getString("usuario");
-                	  String password = rs.getString("contrasena");
-                	  
-                	  if(password.equals(pPassword))
-                	  {
-                    	  user = new UserBO();
-                    	  user.setUsername(username);
-                    	  user.setPassword(password);
-                    	  return user;
-                	  }
-                  }
-              } 
-              catch (SQLException ex) 
-              {
-                  System.out.println("No se obtuvo statement");
-                  ex.printStackTrace();
-              }
-    		} 
-    		else 
-    		{
-    			System.out.println("Failed to make connection!");
-    		}
-        } 
-		catch (SQLException e)
+			factory = new Configuration().configure().buildSessionFactory();
+			System.out.println("You made it, take control your database now!");
+		} 
+		catch (Throwable ex) 
 		{
-            System.out.println("Connection Failed! Check output console");
-            e.printStackTrace();
-        }
-        return null;
+			System.err.println("Failed to create sessionFactory object." + ex);
+			throw new ExceptionInInitializerError(ex);
+		}
+				
+		Session session = factory.openSession();
+	    Transaction tx = null;
+
+		try 
+		{
+			tx = session.beginTransaction();
+			System.out.println("Empieza Query...");
+			Query query = session.createQuery("FROM UserBO WHERE usuario = :user");
+			query.setParameter("user", pUsername);
+			System.out.println("Entra Query...");
+	        List usuarios = query.list(); 
+	        for (Iterator iterator = usuarios.iterator(); iterator.hasNext();)
+	        {
+	           System.out.println("Enters for...");
+	           user = (UserBO) iterator.next();
+	           String username = user.getUsername();
+	           String password = user.getPassword();
+	           System.out.print("Usuario: " + username); 
+	           System.out.print("Password: " + password); 
+	           if (password.equals(pPassword)) 
+	           {
+	        	   user = new UserBO();
+	        	   user.setUsername(username);
+	        	   user.setPassword(password);
+	        	   return user;
+				}
+	        }
+	        tx.commit();
+			
+//			System.out.println("Creating statement...");
+//			String sql = "SELECT usuario, contrasena FROM usuarios WHERE usuario = ?";
+//			preparedStatement = connection.prepareStatement(sql);
+//			preparedStatement.setString(1, pUsername);
+//			System.out.println("Sending statement...");
+//			ResultSet rs = preparedStatement.executeQuery();
+//			System.out.println("Recieved statement...");
+
+//			while (rs.next()) 
+//			{
+//				System.out.println("Enters while...");
+//				String username = rs.getString("usuario");
+//				String password = rs.getString("contrasena");
+//				System.out.println("Username: " + username + "Password: "
+//						+ password);
+//
+//				if (password.equals(pPassword)) 
+//				{
+//					user = new UserBO();
+//					user.setUsername(username);
+//					user.setPassword(password);
+//					return user;
+//				}
+//			}
+		} 
+		catch (HibernateException e) 
+	    {
+	       if (tx!=null) tx.rollback();
+	       e.printStackTrace(); 
+	    } 
+	    finally 
+	    {
+	       session.close(); 
+	    }
+
+		return null;
 
 	}
 }
