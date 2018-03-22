@@ -3,7 +3,7 @@ package view;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-//import control.SessionControl;
+import control.SessionControl;
 import model.UserBO;
 import javax.swing.*;
 import java.io.*;
@@ -21,7 +21,7 @@ import org.hibernate.cfg.Configuration;
 public class LoginView extends javax.swing.JFrame {
 
     JFrame frame;
-//    SessionControl login = new SessionControl();
+    SessionControl login = new SessionControl();
     public static SessionFactory factory;
     public static UserBO userBO = null;
 
