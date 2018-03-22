@@ -49,5 +49,11 @@ public class UserHomeFile implements UserHome
 		
 		return null;
 	}
+        
+    public UserBO changePassword(String pOldPassword, String pNewPassword)
+    {
+        
+        return null;
+    }
 
 }

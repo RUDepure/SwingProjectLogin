@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
+import view.LoginView;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -17,88 +18,79 @@ import org.hibernate.cfg.Configuration;
 
 public class UserHomeDB implements UserHome 
 {
-	private static SessionFactory factory;
+    UserBO user = null;
+    
+    public UserBO validate(String pUsername, String pPassword)
+    {
+        Transaction tx = null;
+        Session session = LoginView.factory.openSession();
 
-	public UserBO validate(String pUsername, String pPassword) 
-	{
-		UserBO user = null;
+        try 
+        {
+            tx = session.beginTransaction();
+            System.out.println("Empieza Query...");
+            Query query = session.createQuery("FROM UserBO WHERE usuario = :user");
+            query.setParameter("user", pUsername);
+            System.out.println("Entra Query...");
+            List usuarios = query.list();
+            
+            for (Iterator iterator = usuarios.iterator(); iterator.hasNext();)
+            {
+                System.out.println("Enters for...");
+                user = (UserBO) iterator.next();
+                String username = user.getUsername();
+                String password = user.getPassword();
+                System.out.print("Usuario: " + username);
+                System.out.print("Password: " + password);
+                
+                if (password.equals(pPassword))
+                {
+                    
+                    return user;
+                }
+            }
+            tx.commit();
 
-		try 
-		{
-			factory = new Configuration().configure().buildSessionFactory();
-			System.out.println("You made it, take control your database now!");
-		} 
-		catch (Throwable ex) 
-		{
-			System.err.println("Failed to create sessionFactory object." + ex);
-			throw new ExceptionInInitializerError(ex);
-		}
-				
-		Session session = factory.openSession();
-	    Transaction tx = null;
+        }
+        catch (HibernateException e)
+        {
+            if (tx != null) 
+            {
+                tx.rollback();
+            }
+            e.printStackTrace();
+        }
+        finally
+        {
+            session.close();
+            System.out.println("Cierra session");
+        }
+        return null;
 
-		try 
-		{
-			tx = session.beginTransaction();
-			System.out.println("Empieza Query...");
-			Query query = session.createQuery("FROM UserBO WHERE usuario = :user");
-			query.setParameter("user", pUsername);
-			System.out.println("Entra Query...");
-	        List usuarios = query.list(); 
-	        for (Iterator iterator = usuarios.iterator(); iterator.hasNext();)
-	        {
-	           System.out.println("Enters for...");
-	           user = (UserBO) iterator.next();
-	           String username = user.getUsername();
-	           String password = user.getPassword();
-	           System.out.print("Usuario: " + username); 
-	           System.out.print("Password: " + password); 
-	           if (password.equals(pPassword)) 
-	           {
-	        	   user = new UserBO();
-	        	   user.setUsername(username);
-	        	   user.setPassword(password);
-	        	   return user;
-				}
-	        }
-	        tx.commit();
-			
-//			System.out.println("Creating statement...");
-//			String sql = "SELECT usuario, contrasena FROM usuarios WHERE usuario = ?";
-//			preparedStatement = connection.prepareStatement(sql);
-//			preparedStatement.setString(1, pUsername);
-//			System.out.println("Sending statement...");
-//			ResultSet rs = preparedStatement.executeQuery();
-//			System.out.println("Recieved statement...");
-
-//			while (rs.next()) 
-//			{
-//				System.out.println("Enters while...");
-//				String username = rs.getString("usuario");
-//				String password = rs.getString("contrasena");
-//				System.out.println("Username: " + username + "Password: "
-//						+ password);
-//
-//				if (password.equals(pPassword)) 
-//				{
-//					user = new UserBO();
-//					user.setUsername(username);
-//					user.setPassword(password);
-//					return user;
-//				}
-//			}
-		} 
-		catch (HibernateException e) 
-	    {
-	       if (tx!=null) tx.rollback();
-	       e.printStackTrace(); 
-	    } 
-	    finally 
-	    {
-	       session.close(); 
-	    }
-
-		return null;
-
-	}
+    }
+//    public UserBO changePassword(String pOldPassword, String pNewPassword)
+//    {
+//        Session session = LoginView.factory.openSession();
+//        Transaction tx = null;
+//      
+//        try 
+//        {
+//            tx = session.beginTransaction();
+//            UserBO employee = (UserBO)session.get(UserBO.class, EmployeeID); 
+//            employee.setPassword( pNewPassword );
+//            session.update(employee); 
+//            tx.commit();
+//        } 
+//        catch (HibernateException e) 
+//        {
+//            if (tx!=null) tx.rollback();
+//            e.printStackTrace(); 
+//        } 
+//        finally 
+//        {
+//          session.close(); 
+//        }
+//        
+//        return null;
+//    }
 }

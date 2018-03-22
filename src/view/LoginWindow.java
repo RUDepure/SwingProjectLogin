@@ -21,7 +21,7 @@ import java.util.Arrays;
  *
  * @author Ruben Hernandez
  */
-public class DemoMain  
+public class LoginWindow  
 {    
     
     /**
@@ -47,19 +47,19 @@ public class DemoMain
         } 
         catch (ClassNotFoundException ex) 
         {
-            java.util.logging.Logger.getLogger(DemoMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } 
         catch (InstantiationException ex) 
         {
-            java.util.logging.Logger.getLogger(DemoMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } 
         catch (IllegalAccessException ex) 
         {
-            java.util.logging.Logger.getLogger(DemoMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } 
         catch (javax.swing.UnsupportedLookAndFeelException ex) 
         {
-            java.util.logging.Logger.getLogger(DemoMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold> /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() 

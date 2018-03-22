@@ -1,9 +1,9 @@
 ruben123,holaruben
-prueba,prueba
+prueba,password
 cafelungo,teverde
 nameless,king
 future,trunks
-light,bowgun
+insect,glaive
 energy,storage
 long,string
 dark,souls
