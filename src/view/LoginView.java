@@ -23,7 +23,7 @@ public class LoginView extends javax.swing.JFrame {
     JFrame frame;
     SessionControl login = new SessionControl();
     public static SessionFactory factory;
-    public static UserBO userBO = null;
+    public static UserBO userBO;
 
     /**
      * Creates new form FirstSwingExampleGUI
@@ -31,6 +31,10 @@ public class LoginView extends javax.swing.JFrame {
     public LoginView() 
     {
         initComponents();
+        userBO = null;
+        
+        if (userBO == null)
+            System.out.println("No hay sesion de usuario.");
 
         try 
         {

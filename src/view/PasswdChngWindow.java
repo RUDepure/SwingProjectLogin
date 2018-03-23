@@ -5,7 +5,12 @@
  */
 package view;
 
-import view.LoginView;
+import control.SessionControl;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import model.UserBO;
+import static view.LoginView.userBO;
+
 /**
  *
  * @author Ruben Hernandez
@@ -15,8 +20,13 @@ public class PasswdChngWindow extends javax.swing.JFrame {
     /**
      * Creates new form PasswdChngWindow
      */
+    SessionControl login = new SessionControl();
+    JFrame frame;
+    private static UserBO userBO;
+
     public PasswdChngWindow() {
         initComponents();
+        userBO = LoginView.userBO;
     }
 
     /**
@@ -31,10 +41,10 @@ public class PasswdChngWindow extends javax.swing.JFrame {
         lblOldPasswd = new javax.swing.JLabel();
         lblNewPasswd = new javax.swing.JLabel();
         lblConfNewPasswd = new javax.swing.JLabel();
-        txtOldPasswd = new javax.swing.JTextField();
-        txtNewPasswd = new javax.swing.JTextField();
-        txtConfNewPasswd = new javax.swing.JTextField();
         btnConfirm = new javax.swing.JButton();
+        passOldPasswd = new javax.swing.JPasswordField();
+        passNewPasswd = new javax.swing.JPasswordField();
+        passConfNewPasswd = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -50,19 +60,12 @@ public class PasswdChngWindow extends javax.swing.JFrame {
         lblConfNewPasswd.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblConfNewPasswd.setText("Confirm New Password");
 
-        txtOldPasswd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtOldPasswdActionPerformed(evt);
-            }
-        });
-
-        txtNewPasswd.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNewPasswdActionPerformed(evt);
-            }
-        });
-
         btnConfirm.setText("Confirm");
+        btnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -78,85 +81,82 @@ public class PasswdChngWindow extends javax.swing.JFrame {
                             .addComponent(lblNewPasswd, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblOldPasswd, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtOldPasswd, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE)
-                            .addComponent(txtNewPasswd)
-                            .addComponent(txtConfNewPasswd))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(passOldPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(passConfNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(66, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(34, 34, 34)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblOldPasswd)
-                    .addComponent(txtOldPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passOldPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblNewPasswd)
-                    .addComponent(txtNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblConfNewPasswd)
-                    .addComponent(txtConfNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(passConfNewPasswd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnConfirm)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtOldPasswdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtOldPasswdActionPerformed
+    private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtOldPasswdActionPerformed
 
-    private void txtNewPasswdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNewPasswdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNewPasswdActionPerformed
+        if (passOldPasswd.getText().equals(userBO.getPassword())) 
+        {
+            if (passNewPasswd.getText().equals(passOldPasswd.getText())) 
+            {
+                JOptionPane.showMessageDialog(frame, "Por favor proporcione una contraseña diferente a la original", "Contraseña repetida", JOptionPane.ERROR_MESSAGE);
+            } 
+            else 
+            {
+                if (passNewPasswd.getText().equals(passConfNewPasswd.getText())) 
+                {
+                    userBO = login.changePassword(LoginView.userBO.getId(), passNewPasswd.getText());
+                    if (userBO != null) 
+                    {
+                        JOptionPane.showMessageDialog(frame, "Se cambio la contraseña con exito!");
+                        LoginView.userBO = userBO;
+                        this.setVisible(false);
+                        SessionWindow sess = new SessionWindow();
+                        sess.setVisible(true);
+                    } 
+                    else 
+                        System.out.println("Hubo un error al querer cambiar la contraseña.");
+                }
+                else 
+                    JOptionPane.showMessageDialog(frame, "La contraseña que se proporciono no coincide al confirmarla", "Contraseñas no coinciden", JOptionPane.ERROR_MESSAGE);
+            }
+
+        } 
+        else 
+            JOptionPane.showMessageDialog(frame, "Se proporciono una contraseña equivocada", "Contraseña equivocada", JOptionPane.ERROR_MESSAGE);
+
+
+    }//GEN-LAST:event_btnConfirmActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PasswdChngWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PasswdChngWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PasswdChngWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PasswdChngWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new PasswdChngWindow().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirm;
     private javax.swing.JLabel lblConfNewPasswd;
     private javax.swing.JLabel lblNewPasswd;
     private javax.swing.JLabel lblOldPasswd;
-    private javax.swing.JTextField txtConfNewPasswd;
-    private javax.swing.JTextField txtNewPasswd;
-    private javax.swing.JTextField txtOldPasswd;
+    private javax.swing.JPasswordField passConfNewPasswd;
+    private javax.swing.JPasswordField passNewPasswd;
+    private javax.swing.JPasswordField passOldPasswd;
     // End of variables declaration//GEN-END:variables
 }

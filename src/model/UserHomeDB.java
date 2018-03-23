@@ -68,29 +68,30 @@ public class UserHomeDB implements UserHome
         return null;
 
     }
-//    public UserBO changePassword(String pOldPassword, String pNewPassword)
-//    {
-//        Session session = LoginView.factory.openSession();
-//        Transaction tx = null;
-//      
-//        try 
-//        {
-//            tx = session.beginTransaction();
-//            UserBO employee = (UserBO)session.get(UserBO.class, EmployeeID); 
-//            employee.setPassword( pNewPassword );
-//            session.update(employee); 
-//            tx.commit();
-//        } 
-//        catch (HibernateException e) 
-//        {
-//            if (tx!=null) tx.rollback();
-//            e.printStackTrace(); 
-//        } 
-//        finally 
-//        {
-//          session.close(); 
-//        }
-//        
-//        return null;
-//    }
+    public UserBO changePassword(int userID, String pNewPassword)
+    {
+        Session session = LoginView.factory.openSession();
+        Transaction tx = null;
+      
+        try 
+        {
+            tx = session.beginTransaction();
+            UserBO user = (UserBO)session.get(UserBO.class, userID); 
+            user.setPassword(pNewPassword);
+            session.update(user); 
+            tx.commit();
+            return user;
+        } 
+        catch (HibernateException e) 
+        {
+            if (tx!=null) tx.rollback();
+            e.printStackTrace(); 
+        } 
+        finally 
+        {
+          session.close(); 
+        }
+        
+        return null;
+    }
 }
